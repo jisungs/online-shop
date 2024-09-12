@@ -1,5 +1,8 @@
+from django.http import HttpResponseRedirect
+
 from django.shortcuts import render, get_object_or_404
 
+from cart.forms import CartAddProductForm
 from .models import Category, Product
 # Create your views here.
 
@@ -22,12 +25,20 @@ def product_list(request, category_slug=None):
 
 
 def product_detail(request, id, slug):
-    product = get_object_or_404(
-        Product, id=id, slug=slug, available=True
-    )
-    #  cart_product_form = CartAddProductForm()
+    product = get_object_or_404(Product, id=id, slug=slug, available=True)
+
+
+    cart_product_form = CartAddProductForm()
+    
+    # if request.method == "POST":
+    #     cart_product_form = CartAddProductForm()
+    #     if cart_product_form.is_valid():
+    #         return HttpResponseRedirect("/thanks/")
+    #     else:
+    #         cart_product_form = CartAddProductForm()
+    
     return render(
         request,
         'shop/product/detail.html',
-        {'product': product},
+        {'product': product , 'cart_product_form': cart_product_form},
     )

@@ -14,12 +14,14 @@
         {{ product.category }}
       </a>
     </h2>
-    <p class="price">${{ product.price }}</p>
-    {% comment %} <form action="{% url "cart:cart_add" product.id %}" method="post">
+
+    <p class="price">{{ product.price }} 원</p>
+    <form action="{% url "cart:cart_add" product.id %}" method="post">
       {{ cart_product_form }}
+      <br/>
       {% csrf_token %}
       <input type="submit" value="Add to cart">
-    </form> {% endcomment %}
+    </form> 
     {{ product.description|linebreaks }}
   </div>
 {% endblock %}
