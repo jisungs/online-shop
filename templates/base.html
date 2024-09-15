@@ -12,18 +12,18 @@
     </div>
     <div id="subheader">
       <div class="cart">
-        Cart is empty
-        {% comment %} {% with total_items=cart|length %}
+         {% with total_items=cart|length %}
           {% if total_items > 0 %}
-            Your cart:
+            장바구니:
             <a href="{% url "cart:cart_detail" %}">
-              {{ total_items }} item{{ total_items|pluralize }},
-              ${{ cart.get_total_price }}
+              {{ total_items }} 상품{{ total_items|pluralize }},
+              {{ cart.get_total_price }}원
             </a>
           {% elif not order %}
-            Your cart is empty.
+            장바구니가 비었습니다.
           {% endif %}
-        {% endwith %} {% endcomment %}
+        {% endwith %} 
+
       </div>
     </div>
     <div id="content">
