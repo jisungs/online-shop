@@ -16,7 +16,7 @@
           {% if total_items > 0 %}
             장바구니:
             <a href="{% url "cart:cart_detail" %}">
-              {{ total_items }} 상품{{ total_items|pluralize }},
+              {{ total_items }}개 상품{{ total_items|pluralize }},
               {{ cart.get_total_price }}원
             </a>
           {% elif not order %}
