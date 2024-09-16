@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}
+  주문현황
+{% endblock %}
+
+{% block content %}
+  <h1>주문현황</h1>
+  <div class="order-info">
+    <h3>고객님의 주문번호</h3>
+    <ul>
+      {% for item in cart %}
+        <li>
+          {{ item.quantity }}x {{ item.product.name }}
+          <span>${{ item.total_price }}</span>
+        </li>
+      {% endfor %}
+    </ul>
+    <p>전체: ${{ cart.get_total_price }}</p>
+  </div>
+  <form method="post" class="order-form">
+    {{ form.as_p }}
+    <p><input type="submit" value="Place order"></p>
+    {% csrf_token %}
+  </form>
+{% endblock %}

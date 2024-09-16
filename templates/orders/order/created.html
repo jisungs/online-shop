@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}
+  구매해주셔서 감사합니다.
+{% endblock %}
+
+{% block content %}
+  <h1>구매해주셔서 감사합니다.</h1>
+  <p>고객님의 주문은 성공적으로 전달되었습니다. 고객님의 주문번호는 
+  <strong>{{ order.id }}</strong> 입니다.</p>
+  
+  <p class="text-right">
+    <a href="{% url "shop:product_list" %}" class="buttonlight">Continue shopping</a>
+  </p>
+
+{% endblock %}
+
