@@ -20,7 +20,7 @@ def order_create(request):
                 )
             cart.clear()
             #비동기 작업으로 주문이 생성되면 메일을 전송
-            order_created.delay(order.id)
+            # order_created.delay(order.id)
             print("주문이 생성되었습니다.")
             return render(request, 'orders/order/created.html', {'order':order})
     else:
