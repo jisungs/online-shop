@@ -16,11 +16,48 @@
         </li>
       {% endfor %}
     </ul>
-    <p>전체: ${{ cart.get_total_price }}</p>
+    <p>전체: {{ cart.get_total_price }} 원</p>
+    
   </div>
   <form method="post" class="order-form">
     {{ form.as_p }}
-    <p><input type="submit" value="Place order"></p>
+    <p><input onclick = "requestPay()" type="submit" value="Place order"></p>
     {% csrf_token %}
   </form>
+   
+  <button onclick="requestPay()"> 결재하기 </button>
 {% endblock %}
+
+
+{%block script%}
+
+ <script>
+  function requestPay() {
+
+    IMP.init("imp46417418");
+    IMP.request_pay(
+  {
+    pg: "kcp",
+    pay_method: "card",
+    merchant_uid: `payment-111`, // 주문 고유 번호
+    name: "녹차",
+    amount: 64900,
+    buyer_email: "gildong@gmail.com",
+    buyer_name: "홍길동",
+    buyer_tel: "010-4242-4242",
+    buyer_addr: "서울특별시 강남구 신사동",
+    buyer_postcode: "01181",
+  },
+  function (rsp) {//callback
+      if(rsp.success){
+        console.log(rsp);
+      }else{
+        console.log(rsp);
+      }
+    });
+  }
+
+
+ </script>
+
+{%endblock%}
