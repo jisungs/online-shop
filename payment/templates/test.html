@@ -1,0 +1,24 @@
+<button id="payButton">Pay Now</button>
+
+<script>
+document.getElementById('payButton').onclick = function() {
+    fetch('/pay/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: JSON.stringify({
+            'amount': 5000
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            alert('Payment error: ' + data.error);
+        } else {
+            alert('Payment request successful');
+        }
+    });
+};
+</script>
