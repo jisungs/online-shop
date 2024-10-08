@@ -11,6 +11,9 @@ from django.http import JsonResponse
 def payment_process(request):
     return render(request, 'payment/process.html')
 
+def payment_complete(request):
+    return render(request, 'payment/complete.html')
+
 def payment_request(request):
     iamport = Iamport(
         imp_key = config('IAMPORT_API_KEY'),

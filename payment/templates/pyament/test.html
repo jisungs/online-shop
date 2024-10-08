@@ -1,5 +1,17 @@
-<button id="payButton">Pay Now</button>
 
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+  결재 테스트 페이지
+{% endblock %}
+
+{%block content%} 
+<button id="payButton">Pay Now</button>
+{% endblock%}
+
+
+{%block script%}
 <script>
 document.getElementById('payButton').onclick = function() {
     fetch('/pay/', {
@@ -22,3 +34,5 @@ document.getElementById('payButton').onclick = function() {
     });
 };
 </script>
+
+{% endblock %}
