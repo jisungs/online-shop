@@ -9,9 +9,21 @@ from django.http import JsonResponse
 
 
 def payment_process(request):
-    return render(request, 'payment/process.html')
+    order_id = request.session.get('order_id')
+    order = get_object_or_404(Order, id=order_id)
+    print(f'주문번호는 : {order_id}')
+    for item in order.items.all():
+        print(item.price)
+        print(item.product.name)
+        print(item.quantity)
 
-def payment_complete(request):
+    
+    context = {
+        "order_id" : order_id, 
+    }
+    return render(request, 'payment/process.html', context)
+
+def payment_completed(request):
     return render(request, 'payment/complete.html')
 
 def payment_request(request):
@@ -62,7 +74,7 @@ def verify_payment(request, product_price, merchant_uid):
         return JsonResponse({'error':e.message})
     
 
-def cancel_payment(request, merchant_uid):
+def payment_canceled(request, merchant_uid):
     iamport = Iamport(
         imp_key = config('IAMPORT_API_KEY'),
         imp_secret = config('IAMPORT_REST_SECRET_KEY'))

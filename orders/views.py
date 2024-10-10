@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.urls import reverse
+from django.shortcuts import render, redirect
 
 from cart.cart import Cart
 from .forms import OrderCreateForm
@@ -21,8 +22,9 @@ def order_create(request):
             cart.clear()
             #비동기 작업으로 주문이 생성되면 메일을 전송
             # order_created.delay(order.id)
-            print("주문이 생성되었습니다.")
-            return render(request, 'orders/order/created.html', {'order':order})
+            request.session['order_id'] = order.id
+            return redirect(reverse('payment:process'))
+            # return render(request, 'orders/order/created.html', {'order':order})
     else:
         form = OrderCreateForm()
     return render(request, 'orders/order/create.html', {'cart':cart, 'form':form})

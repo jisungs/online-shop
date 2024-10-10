@@ -21,17 +21,17 @@
   </div>
   <form method="post" class="order-form">
     {{ form.as_p }}
-    <p><input onclick = "requestPay()" type="submit" value="Place order"></p>
+    <p><input onclick = "requestPay()" type="submit" value="결재하기"></p>
     {% csrf_token %}
   </form>
    
-  <button onclick="requestPay()"> 결재하기 </button>
+  <button onclick=""> 결재하기 </button>
 {% endblock %}
 
 
 {%block script%}
 
- <script>
+ {% comment %} <script>
   function requestPay() {
 
     IMP.init("");
@@ -58,6 +58,6 @@
   }
 
 
- </script>
+ </script> {% endcomment %}
 
 {%endblock%}

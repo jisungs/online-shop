@@ -8,6 +8,11 @@
     
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     
+    {% block script %}
+    {% endblock %}
+
+    {% block style %}
+    {% endblock %}
   </head>
   <body>
     <div id="header">
@@ -35,6 +40,6 @@
     </div>
 
     <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
-    {%block script%}{%endblock%}
+    
   </body>
 </html>

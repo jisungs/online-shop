@@ -1,17 +1,27 @@
 {% extends "base.html" %}
 {% load static %}
 
+
+
 {% block title %} 주문 결재 {% endblock %}
+
+{% block scirpt %}
+    <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
+    <script type = "text/javascript">
+        crsf_token = '{{ crsf_token}}'
+        oredr_create_url = ''
+
+        
+
+
+    </script>
+
+{% endblock %}
 
 {% block content %}
 
-<button>결재하기</button>
+<h1>결재가 진행중입니다.</h1>
 
-<p></p>
-
+<a class="btn btn-lg btn-primary" href='{% url "shop:product_list" %}'>홈으로 돌아가기</a>
 {% endblock %}
 
-{% block scirpt %}
-
-
-{% endblock %}
