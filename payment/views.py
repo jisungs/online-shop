@@ -16,7 +16,6 @@ def payment_process(request):
         print(item.price)
         print(item.product.name)
         print(item.quantity)
-
     
     context = {
         "order_id" : order_id, 
@@ -32,8 +31,11 @@ def payment_request(request):
         imp_secret = config('IAMPORT_REST_SECRET_KEY')
     )
 
+    order_id = request.session.get('order_id')
+    order = get_object_or_404(Order, id=order_id)
+    
     merchant_uid = 'order_id_12345'
-    amount = 100 #결재금액
+    amount = 100 
 
     try: 
         response = iamport.prepare(
