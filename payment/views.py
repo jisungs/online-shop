@@ -2,23 +2,36 @@ from django.shortcuts import render, get_object_or_404,redirect
 from django.conf import settings
 from django.urls import reverse
 from orders.models import Order
+from .models import *
 
 from decouple import config
 from iamport import Iamport
 from django.http import JsonResponse
 
+from .payment_process import get_token
 
 def payment_process(request):
     order_id = request.session.get('order_id')
     order = get_object_or_404(Order, id=order_id)
+    shop_id = config('IAMPORT_SHOP_KEY')
+    price = int
     print(f'주문번호는 : {order_id}')
-    for item in order.items.all():
-        print(item.price)
-        print(item.product.name)
-        print(item.quantity)
     
+    for item in order.items.all():
+        print(f"상품가격 : {item.price}")
+        print(f"상품이름 : {item.product.name}")
+        print(f"주문양 : {item.quantity}")
+        price = int(item.price)
+    
+    merchant_id = PaymentTransaction.objects.create_new(
+        order=order,
+        amount = price
+    )
+    payment_prepare(merchant_order_id= merchant_id, amount=price)
+
     context = {
-        "order_id" : order_id, 
+        "order_id" : order_id,
+        "shop_id" : shop_id
     }
     return render(request, 'payment/process.html', context)
 
@@ -33,7 +46,7 @@ def payment_request(request):
 
     order_id = request.session.get('order_id')
     order = get_object_or_404(Order, id=order_id)
-    
+     
     merchant_uid = 'order_id_12345'
     amount = 100 
 

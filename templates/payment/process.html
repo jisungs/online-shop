@@ -8,11 +8,23 @@
 {% block scirpt %}
     <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
     <script type = "text/javascript">
-        crsf_token = '{{ crsf_token}}'
-        oredr_create_url = ''
+        crsf_token = '{{ crsf_token}}';
+        oredr_create_url = '';
+        order_checkout_url = '';
+        order_validatiaon_url  = '';
+        order_complete_url = '';
 
+        document.addEventListener("DOMContentLoaded", function(){
+            var  IMP = window.IMP;
+            IMP.init('{{shop_id}}');
+
+            var amout = "{{amount}}";
+            var type = "{{type}}";
+
+            var order_id = "{{order_id}}";
+            var merchant_id = "{{merchant_id}}";
+        })
         
-
 
     </script>
 
