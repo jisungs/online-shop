@@ -2,6 +2,7 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 
 import requests
+import json
 from decouple import config
 from iamport import Iamport
 
@@ -21,22 +22,23 @@ def get_token():
         return None
     
 
-
-def payment_prepare(merchant_order_id, amount, *arg, **kwargs):
+def payment_prepare(merchant_uid,  amount,*arg, **kwargs):
     access_token = get_token()
     if access_token:
-        access_data ={
-            'merchant_uid':merchant_order_id,
-            'amount':amount
+        access_data = {
+            'merchant_uid':merchant_uid,
+            'amount': amount
         }
+        json_data = json.dumps(access_data, indent=4)
         url = "https://api.iamport.kr/payments/prepare"
         headers = {
             'Content-Type':'application/json',
-            'Authorization':access_token
+            'Authorization': access_token
         }
-        req = requests.post(url, data=access_data, headers=headers)
+        req = requests.post(url, data = json_data, headers=headers)
+        print(req)
         res = req.json()
-        print(res)
+        print(f' {res}')
         if res['code'] != 0:
             raise ValueError("API 통신 오류")
     else:
@@ -58,5 +60,6 @@ def payment_prepare(merchant_order_id, amount, *arg, **kwargs):
 #             merchant_uid=merchant_uid,
 #             amount=amount
 #         )
+#         print(response)
 #     except Iamport.ResponseError as e:
 #         return JsonResponse({'error':e.message})

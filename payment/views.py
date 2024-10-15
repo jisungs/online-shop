@@ -27,7 +27,10 @@ def payment_process(request):
         order=order,
         amount = price
     )
-    payment_prepare(merchant_order_id= merchant_id, amount=price)
+
+    result = payment_prepare(merchant_uid= merchant_id, amount=price)
+
+    print(f'뷰에서 결재 준비 : {result}')
 
     context = {
         "order_id" : order_id,
