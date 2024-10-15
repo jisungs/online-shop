@@ -15,7 +15,7 @@ class PaymentTransactionManager(models.Manager):
         final_hash = hashlib.sha1((order_hash  + email_hash).encode('utf-8')).hexdigest()[:10]        
         merchant_order_id = "%s"%(final_hash)
 
-        # payment_prepare(merchant_order_id= merchant_order_id, amount=amount)
+        payment_prepare(merchant_uid= merchant_order_id, amount=amount)
 
         transaction = self.model(
             order = order,

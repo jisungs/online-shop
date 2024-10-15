@@ -14,27 +14,24 @@ def payment_process(request):
     order_id = request.session.get('order_id')
     order = get_object_or_404(Order, id=order_id)
     shop_id = config('IAMPORT_SHOP_KEY')
-    price = int
-    print(f'주문번호는 : {order_id}')
-    
+    price = 0.0
+    item_name = ""
+
     for item in order.items.all():
-        print(f"상품가격 : {item.price}")
-        print(f"상품이름 : {item.product.name}")
-        print(f"주문양 : {item.quantity}")
+        item_name = item.product.name
         price = int(item.price)
-    
+
     merchant_id = PaymentTransaction.objects.create_new(
         order=order,
-        amount = price
+        amount =price
     )
-
-    result = payment_prepare(merchant_uid= merchant_id, amount=price)
-
-    print(f'뷰에서 결재 준비 : {result}')
 
     context = {
         "order_id" : order_id,
-        "shop_id" : shop_id
+        "shop_id" : shop_id,
+        "merchant_id":merchant_id,
+        "item_name":item_name,
+        "amount":price
     }
     return render(request, 'payment/process.html', context)
 

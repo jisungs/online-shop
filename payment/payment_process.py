@@ -36,9 +36,8 @@ def payment_prepare(merchant_uid,  amount,*arg, **kwargs):
             'Authorization': access_token
         }
         req = requests.post(url, data = json_data, headers=headers)
-        print(req)
         res = req.json()
-        print(f' {res}')
+        print(res)
         if res['code'] != 0:
             raise ValueError("API 통신 오류")
     else:
