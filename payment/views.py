@@ -14,13 +14,13 @@ def payment_process(request):
     order_id = request.session.get('order_id')
     order = get_object_or_404(Order, id=order_id)
     shop_id = config('IAMPORT_SHOP_KEY')
-    price = 0.0
+    price = 0
+    
     item_name = ""
-
     for item in order.items.all():
         item_name = item.product.name
         price = int(item.price)
-
+   
     merchant_id = PaymentTransaction.objects.create_new(
         order=order,
         amount =price
@@ -34,6 +34,29 @@ def payment_process(request):
         "amount":price
     }
     return render(request, 'payment/process.html', context)
+
+
+def imp_validation(request):
+    if request.method == "POST":
+        order_id = request.POST.get('order_id')
+        order = Order.objects.get(id=order_id)
+        merchant_id = request.POST.get('merchant_id')
+        imp_id = request.POST.get('imp_id')
+        amount = request.POST.get('amount')
+        
+        try:
+            trans = PaymentTransaction.objects.get(
+                order = order,
+                merchant_order_id = merchant_id,
+                amount = amount
+            )
+        except Exception as e:
+            trans = None
+        
+        if trans != None:
+            trans.transaction_id = imp_id
+            
+
 
 def payment_completed(request):
     return render(request, 'payment/complete.html')

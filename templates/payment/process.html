@@ -45,6 +45,7 @@
 
                         // 결제가 완료되었으면 비교해서 디비에 반영
                         // ImpTransaction(e, order_id, rsp.merchant_uid, rsp.imp_uid, rsp.paid_amount);
+                        ImpValication()
                     } else {
                         var msg = '결제에 실패하였습니다.\n';
                         msg += '에러내용 : ' + rsp.error_msg;
@@ -53,6 +54,14 @@
                 });
             }
         });
+
+
+        function ImpValidation (e, order_id, merchant_id, imp_id,amount){
+            e.preverntDefault();
+            console.log("결재 검증후 데이터 베이스 저장")
+
+            
+        }
         
 
     </script>
