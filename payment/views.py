@@ -15,7 +15,7 @@ def payment_process(request):
     order = get_object_or_404(Order, id=order_id)
     shop_id = config('IAMPORT_SHOP_KEY')
     price = 0
-    
+
     item_name = ""
     for item in order.items.all():
         item_name = item.product.name
@@ -41,6 +41,7 @@ def imp_validation(request):
         order_id = request.POST.get('order_id')
         order = Order.objects.get(id=order_id)
         merchant_id = request.POST.get('merchant_id')
+        # merchant_id = PaymentTransaction.objects.get(order=order)
         imp_id = request.POST.get('imp_id')
         amount = request.POST.get('amount')
         
@@ -55,7 +56,17 @@ def imp_validation(request):
         
         if trans != None:
             trans.transaction_id = imp_id
-            
+            trans.success=True
+            trans.save()
+            order.paid =True
+            order.save()
+
+            data = {
+                "works":True
+            }
+            return JsonResponse(data)
+        else:
+            return JsonResponse({}, status = 401)
 
 
 def payment_completed(request):

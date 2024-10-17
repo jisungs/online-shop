@@ -24,7 +24,8 @@ class PaymentTransactionManager(models.Manager):
         )
 
         if success != None:
-            transaction.transaction_status = success
+            transaction.success = success
+            transaction.transaction_status = trasaction_status
         
         try:
             transaction.save()
