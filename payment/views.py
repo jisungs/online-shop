@@ -36,7 +36,7 @@ def payment_process(request):
     return render(request, 'payment/process.html', context)
 
 
-def imp_validation(request):
+def payment_validation(request):
     if request.method == "POST":
         order_id = request.POST.get('order_id')
         order = Order.objects.get(id=order_id)
@@ -70,7 +70,9 @@ def imp_validation(request):
 
 
 def payment_completed(request):
-    return render(request, 'payment/complete.html')
+    order_id = request.GET.get('order_id')
+    order = Order.objects.get(id=order_id)
+    return render(request, 'payment/complete.html', {'order':order})
 
 def payment_request(request):
     iamport = Iamport(

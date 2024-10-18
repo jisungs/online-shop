@@ -9,10 +9,6 @@
     <script type = "text/javascript">
        
         crsf_token = '{{ crsf_token}}';
-        oredr_create_url = '';
-        order_checkout_url = '';
-        order_validatiaon_url  = '';
-        order_complete_url = '';
 
         document.addEventListener("DOMContentLoaded", function(){
             
@@ -45,7 +41,7 @@
 
                         // 결제가 완료되었으면 비교해서 디비에 반영
                         // ImpTransaction(e, order_id, rsp.merchant_uid, rsp.imp_uid, rsp.paid_amount);
-                        ImpValication()
+                        ImpValidation()
                     } else {
                         var msg = '결제에 실패하였습니다.\n';
                         msg += '에러내용 : ' + rsp.error_msg;
@@ -59,6 +55,38 @@
         function ImpValidation (e, order_id, merchant_id, imp_id,amount){
             e.preverntDefault();
             console.log("결재 검증후 데이터 베이스 저장")
+
+            fetch("{% url 'payment:validation'%}",{
+                method:'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': csrf_token
+                }
+
+                body: new URLSearchParams({
+                    order_id: order_id,
+                    merchant_id: merchant_id,
+                    imp_id: imp_id,
+                    amount: amount
+                })
+            })
+            .then(response => respose.json())
+            .then(data=> {
+                if(data.workd){
+                    window.location.href = location.origin + '{% url "payment:complete"%}' + '?order_id='+ order_id;
+                }
+            })
+            .catch(error => {
+                if(error.status===404){
+                    alert("페이지가 존재하지 않습니다.");
+                }else if (error.status === 403){
+                    alert("로그인해주세요");
+                }else{
+                    alert("문제가 발생했습니다. 다시시도해주세요.");
+                }
+            })
+            
+
 
             
         }

@@ -6,7 +6,7 @@ import hashlib
 # Create your models here.
 
 class PaymentTransactionManager(models.Manager):
-    def create_new(self,order,amount, success=None, trasaction_status=None):
+    def create_new(self,order,amount, success=None, transaction_status=None):
         if not order:
             raise ValueError("주문오류")
         
@@ -25,12 +25,13 @@ class PaymentTransactionManager(models.Manager):
 
         if success != None:
             transaction.success = success
-            transaction.transaction_status = trasaction_status
+            transaction.transaction_status = transaction_status
         
         try:
             transaction.save()
         except Exception as e:
             print("save error", e)
+            raise e
 
         return transaction.merchant_order_id
 
@@ -39,6 +40,7 @@ class PaymentTransaction(models.Model):
     merchant_order_id = models.CharField(max_length=120, null=True, blank=True)
     transaction_id = models.CharField(max_length=120, null=True, blank=True)
     amount = models.PositiveIntegerField(default=0)
+    success = models.BooleanField(default=False)
     transaction_status = models.CharField(max_length=220, null=True, blank=True)
     type = models.DateTimeField(auto_now_add=True, auto_now=False)
     created = models.DateTimeField(auto_now_add=True,auto_now=False)
