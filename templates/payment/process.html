@@ -41,7 +41,7 @@
 
                         // 결제가 완료되었으면 비교해서 디비에 반영
                         // ImpTransaction(e, order_id, rsp.merchant_uid, rsp.imp_uid, rsp.paid_amount);
-                        ImpValidation()
+                        ImpValidation(e, order_id, rsp.merchant_uid, rsp.imp_uid, rsp.paid_amount);
                     } else {
                         var msg = '결제에 실패하였습니다.\n';
                         msg += '에러내용 : ' + rsp.error_msg;
@@ -61,19 +61,18 @@
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                     'X-CSRFToken': csrf_token
-                }
+                },
 
-                body: new URLSearchParams({
+                body: new URLSearchParams( 
                     order_id: order_id,
                     merchant_id: merchant_id,
                     imp_id: imp_id,
-                    amount: amount
-                })
+                    amount: amount)
             })
             .then(response => respose.json())
             .then(data=> {
-                if(data.workd){
-                    window.location.href = location.origin + '{% url "payment:complete"%}' + '?order_id='+ order_id;
+                if(data.work){
+                    window.location.href = location.origin + '{% url "payment:completed"%}' + '?order_id='+ order_id;
                 }
             })
             .catch(error => {
