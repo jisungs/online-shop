@@ -8,9 +8,10 @@
     
     <script type = "text/javascript">
        
-        crsf_token = '{{ crsf_token}}';
+        csrf_token = '{{csrf_token}}';
 
-        document.addEventListener("DOMContentLoaded", function(){
+        document.addEventListener("DOMContentLoaded", function(e){
+            e.preventDefault();
             
             var IMP = window.IMP;
             IMP.init('{{shop_id}}');
@@ -38,14 +39,23 @@
                         msg += '\n상점 거래ID : ' + rsp.merchant_uid;
                         msg += '\n결제 금액 : ' + rsp.paid_amount;
                         msg += '\n카드 승인번호 : ' + rsp.apply_num;
-
+                        
+                        
                         // 결제가 완료되었으면 비교해서 디비에 반영
                         // ImpTransaction(e, order_id, rsp.merchant_uid, rsp.imp_uid, rsp.paid_amount);
-                        ImpValidation(e, order_id, rsp.merchant_uid, rsp.imp_uid, rsp.paid_amount);
-                    } else {
+                        //ImpValidation(e, order_id, rsp.merchant_uid, rsp.imp_uid, rsp.paid_amount);
+                    
+                    } else if (rsp.success == false){
+                        console.log('결재실패')
+                        var url = "{% url 'payment:completed' %}"+"?order_id="+ order_id 
+                        return window.location.replace(url)
+                        //ImpValidation(e, order_id, rsp.merchant_uid, rsp.imp_uid, rsp.paid_amount);
+                    } 
+                    else {
+                        
                         var msg = '결제에 실패하였습니다.\n';
                         msg += '에러내용 : ' + rsp.error_msg;
-                        console.log(msg);
+                        console.log(msg)
                     }
                 });
             }
@@ -53,7 +63,8 @@
 
 
         function ImpValidation (e, order_id, merchant_id, imp_id,amount){
-            e.preverntDefault();
+           // e.preverntDefault();
+
             console.log("결재 검증후 데이터 베이스 저장")
 
             fetch("{% url 'payment:validation'%}",{
@@ -63,16 +74,19 @@
                     'X-CSRFToken': csrf_token
                 },
 
-                body: new URLSearchParams( 
+                body: new URLSearchParams({
                     order_id: order_id,
                     merchant_id: merchant_id,
                     imp_id: imp_id,
-                    amount: amount)
+                    amount: amount})
+                   
             })
-            .then(response => respose.json())
+            .then(rsp => rsp.json())
             .then(data=> {
                 if(data.work){
-                    window.location.href = location.origin + '{% url "payment:completed"%}' + '?order_id='+ order_id;
+                    //window.location.href = location.origin + '{% url "payment:completed"%}' + '?order_id='+ order_id;
+                    var url = "{% url 'payment:completed' %}"+"?order_id="+ order_id
+                    return window.location.replace(url)
                 }
             })
             .catch(error => {
@@ -81,13 +95,10 @@
                 }else if (error.status === 403){
                     alert("로그인해주세요");
                 }else{
+                    console.log(error)
                     alert("문제가 발생했습니다. 다시시도해주세요.");
                 }
             })
-            
-
-
-            
         }
         
 

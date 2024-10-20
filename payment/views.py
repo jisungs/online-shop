@@ -37,6 +37,7 @@ def payment_process(request):
 
 
 def payment_validation(request):
+    print('검증 함수 실행')
     if request.method == "POST":
         order_id = request.POST.get('order_id')
         order = Order.objects.get(id=order_id)
