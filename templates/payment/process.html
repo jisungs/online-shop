@@ -40,16 +40,13 @@
                         msg += '\n결제 금액 : ' + rsp.paid_amount;
                         msg += '\n카드 승인번호 : ' + rsp.apply_num;
                         
-                        
                         // 결제가 완료되었으면 비교해서 디비에 반영
                         // ImpTransaction(e, order_id, rsp.merchant_uid, rsp.imp_uid, rsp.paid_amount);
-                        //ImpValidation(e, order_id, rsp.merchant_uid, rsp.imp_uid, rsp.paid_amount);
+                    ImpValidation(e, order_id, rsp.merchant_uid, rsp.imp_uid, rsp.paid_amount);
                     
                     } else if (rsp.success == false){
                         console.log('결재실패')
-                        var url = "{% url 'payment:completed' %}"+"?order_id="+ order_id 
-                        return window.location.replace(url)
-                        //ImpValidation(e, order_id, rsp.merchant_uid, rsp.imp_uid, rsp.paid_amount);
+                        
                     } 
                     else {
                         
@@ -83,7 +80,7 @@
             })
             .then(rsp => rsp.json())
             .then(data=> {
-                if(data.work){
+                if(data.works){
                     //window.location.href = location.origin + '{% url "payment:completed"%}' + '?order_id='+ order_id;
                     var url = "{% url 'payment:completed' %}"+"?order_id="+ order_id
                     return window.location.replace(url)

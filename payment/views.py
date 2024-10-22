@@ -45,7 +45,7 @@ def payment_validation(request):
         # merchant_id = PaymentTransaction.objects.get(order=order)
         imp_id = request.POST.get('imp_id')
         amount = request.POST.get('amount')
-        
+        print(f'port 안 데이터 {order_id}\n,{merchant_id}\n,{amount}\n,{order}\n')
         try:
             trans = PaymentTransaction.objects.get(
                 order = order,
@@ -54,7 +54,7 @@ def payment_validation(request):
             )
         except Exception as e:
             trans = None
-        
+        print(f'만들어진 주문데이터{trans}')
         if trans != None:
             trans.transaction_id = imp_id
             trans.success=True
@@ -65,6 +65,7 @@ def payment_validation(request):
             data = {
                 "works":True
             }
+            print(f'처리후 데이터 {data}')
             return JsonResponse(data)
         else:
             return JsonResponse({}, status = 401)
