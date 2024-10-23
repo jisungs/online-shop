@@ -47,6 +47,7 @@
                     } else if (rsp.success == false){
                         console.log('결재실패')
                         
+                        return window.location.replace("{% url 'payment:failed'%}")
                     } 
                     else {
                         

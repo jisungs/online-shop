@@ -76,6 +76,10 @@ def payment_completed(request):
     order = Order.objects.get(id=order_id)
     return render(request, 'payment/complete.html', {'order':order})
 
+
+def payment_failed(request):
+    return render(request, 'payment/failed.html')
+
 def payment_request(request):
     iamport = Iamport(
         imp_key = config('IAMPORT_API_KEY'),
@@ -138,4 +142,6 @@ def payment_canceled(request, merchant_uid):
     except Iamport.ResponseError as e:
        return JsonResponse({'error':e.message})
     
+
+
 
